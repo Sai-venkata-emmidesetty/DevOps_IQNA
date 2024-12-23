@@ -1,0 +1,38 @@
+1)create a Amazon Linux ec2 instance 
+
+2)CloudWatchAgentServerPolicy- IAM role for the ec2 cloud watch logs agent and attach it to your ec2 instance
+
+3)sudo yum install amazon-cloudwatch-agent- Command to install cloudwatch logs agent, SSH and give this command
+
+4)sudo vi /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
+
+
+{
+  "agent": {
+    "metrics_collection_interval": 60,
+    "run_as_user": "cwagent"
+  },
+  "metrics": {
+    "append_dimensions": {
+      "InstanceId": "${aws:InstanceId}"
+    },
+    "metrics_collected": {
+      "disk": {
+        "measurement": [
+          "used_percent"
+        ],
+        "metrics_collection_interval": 60,
+        "resources": [
+          "/"
+        ]
+      }
+    }
+  }
+}
+
+for vi exit type :wq!
+
+5)sudo systemctl restart amazon-cloudwatch-agent.service
+
+6) Go to cloudwatch -> All metrics -> CWAGENT will be there as metric -> You can create a alarm based on it
+
